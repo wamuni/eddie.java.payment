@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source "$(dirname "$0")/_root.sh"
+
+usage() {
+	cat << 'EOF'
+Usage:
+	bin/dev <command> [args]
+
+Core:
+	run		Run main class via exec-maven-plugin
+	compile 	Compile main sources
+	test		Run unit tests
+	itest		Run integration tests (if you tag them later)
+	build		Clean + test + package
+	clean		Clean build outpouts
+Help:
+	help		Show this message
+EOF
+}
+
+mvn() {
+	./mvnw -q "$@"
+}
+
+cmd="${1:-help}"
+shift || true
+
+case "$cmd" in
+	help|-h|--help)
+		usage
+		;;
+
+	run)
+		mvn -DskipTests exec:java "$@"
+		;;
+
+	compile)
+		mvn compile "$@"
+		;;
+
+	test)
+		mvn test "$@"
+		;;
+
+	itest)
+		mvn test "$@"
+		;;
+
+	build)
+		mvn clean test package $"$@"
+		;;
+
+	clean)
+		mvn clean "$@"
+		;;
+	
+	*)
+		echo "Unknown command: $cmd"
+		echo
+		usage
+		exit 1
+		;;
+esac
