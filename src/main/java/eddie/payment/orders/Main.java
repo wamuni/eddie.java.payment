@@ -2,6 +2,7 @@ package eddie.payment.orders;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Main {
 	public static void main(String[] args) {
@@ -37,6 +38,56 @@ public class Main {
 		CarList.add(new Bus("Toyota", "Yellow", "RR"));
 		CarList.add(new Bus("Sabaru", "Blue", "RR"));
 		printListWithBound(CarList);
+		
+		UserRepository userRepository = new UserRepository();
+		Optional<User> optionalUser = userRepository.findUserByName("Eddie");
+		if  (optionalUser.isPresent()) {
+			System.out.println(optionalUser.get().getSecondName());
+		} else {
+			User defaultUser = new User("Neo", "Handerson");
+			System.out.println(defaultUser.getSecondName());
+		}
+		
+		// orElse, this process of initialization will always be executed
+		User user = optionalUser.orElse(new User("Neo", "Anderson"));
+		System.out.println(user.getSecondName());
+		
+		// Using orElseGet() with Lambda expression, this will be only executed when null value
+		User userFromOrElseGet = optionalUser.orElseGet(() -> new User("Neo", "Anderson II"));
+		System.out.println(userFromOrElseGet.getSecondName());
+
+		// Using orElseThrow
+		// User useThrow = optionalUser.orElseThrow(() -> new RuntimeException("User not found"));
+		
+		// ifPresent()
+		// public void ifPresent(java.util.function.Consumer<? super T> action)
+		// when the user is null, then there won't be anything executed;
+		// when the user is exist, then it will execute the function;
+		optionalUser.ifPresent(u -> System.out.println(u.getSecondName()));
+
+		// ifPresentOrElse()
+		optionalUser.ifPresentOrElse(u -> System.out.println(u.getFirstName()), () -> System.out.println("User not found"));
+		
+		// Optional.filter()
+		Optional<User> ou = optionalUser.filter(u -> u.getSecondName().equals("Pan"));
+		System.out.println(ou.isPresent());
+
+		// Optional.map()
+		Optional<String> optionalString = optionalUser.map(User::getSecondName);
+		optionalString.ifPresentOrElse(
+				os -> System.out.println(os),
+				() -> System.out.println("No value mapped")
+		);
+
+		// Optional Class
+		Optional<Object> optionalBox = Optional.empty();
+		System.out.println(optionalBox.isPresent());
+		System.out.println(optionalBox.isEmpty());
+
+		String value = "Eddie";
+		optionalBox = optionalBox.of(value);
+		System.out.println(optionalBox.isPresent());
+		System.out.println(optionalBox.isEmpty());
 	}
 
 	public static void process(Runnable r) {
