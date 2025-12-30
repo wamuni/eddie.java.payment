@@ -3,6 +3,7 @@ package eddie.payment.orders;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Main {
 	public static void main(String[] args) {
@@ -78,6 +79,10 @@ public class Main {
 				os -> System.out.println(os),
 				() -> System.out.println("No value mapped")
 		);
+		
+		// Optional can be transformed to a Stream;
+		Stream<String> a = optionalUser.map(User::getFirstName).stream();
+		a.forEach(System.out::println);
 
 		// Optional Class
 		Optional<Object> optionalBox = Optional.empty();
@@ -88,6 +93,9 @@ public class Main {
 		optionalBox = optionalBox.of(value);
 		System.out.println(optionalBox.isPresent());
 		System.out.println(optionalBox.isEmpty());
+		
+		StreamPrint sp = new StreamPrint();
+		sp.StartToPrint();
 	}
 
 	public static void process(Runnable r) {
