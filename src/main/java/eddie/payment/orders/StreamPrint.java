@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.Arrays;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.io.IOException;
 
 public class StreamPrint {
 	public StreamPrint() {};
@@ -34,5 +38,24 @@ public class StreamPrint {
 		String[] array = {"d", "e", "f"};
 		Stream<String> arrayStream = Arrays.stream(array);
 		arrayStream.forEach(System.out::println);
+		
+		Stream<Integer> intStream1 = Stream.of(1, 2, 3);
+		Stream<Integer> intStream2 = Stream.of(4, 5, 6);
+		Stream.concat(intStream1, intStream2).forEach(System.out::println);
+		
+		Stream.Builder<String> streamBuilder = Stream.builder();
+		streamBuilder.add("a");
+		streamBuilder.add("b");
+		if (Math.random() > 0.5) { streamBuilder.add("c"); }
+		Stream<String> streamFromStreamBuilder = streamBuilder.build();
+		streamFromStreamBuilder.forEach(System.out::println);
+		
+		//Handle file with stream
+		Path path = Path.of("file.txt");
+		try (Stream<String> lines = Files.lines(path)) {
+			lines.forEach(System.out::println);
+		} catch (IOException e) {
+			e.getStackTrace();
+		}
 	}
 }
