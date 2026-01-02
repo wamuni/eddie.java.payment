@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 public class StreamPrint {
 	public StreamPrint() {};
@@ -52,10 +53,19 @@ public class StreamPrint {
 		
 		//Handle file with stream
 		Path path = Path.of("file.txt");
+		System.out.println(Path.of(".").toAbsolutePath());
 		try (Stream<String> lines = Files.lines(path)) {
 			lines.forEach(System.out::println);
 		} catch (IOException e) {
 			e.getStackTrace();
 		}
+		
+		IntStream intStream = IntStream.range(1, 5);
+		Stream<Integer> integerStreamFromBox = intStream.boxed();
+		integerStreamFromBox.forEach(System.out::println);
+		
+		Stream.generate(Math::random).limit(10).forEach(System.out::println);
+		Stream.generate(() -> "Eddie").limit(5).forEach(System.out::println);
+		Stream.iterate(0, n -> n <= 10, n -> n + 2).forEach(System.out::println);
 	}
 }
