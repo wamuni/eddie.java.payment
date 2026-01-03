@@ -28,7 +28,9 @@ public class StreamPrint {
 			if (person.getAge() > 18) { adults.add(person); }
 		}
 		System.out.println(adults);
-		
+		//distinct will maintaince a hashmap
+		Stream.of("apple", "orange", "apple", "orange", "cherry").distinct().forEach(System.out::println);
+
 		List<Person> adultsStream = people.stream().filter(person -> person.getAge() > 18).collect(Collectors.toList());
 		System.out.println(adultsStream);
 
@@ -67,5 +69,8 @@ public class StreamPrint {
 		Stream.generate(Math::random).limit(10).forEach(System.out::println);
 		Stream.generate(() -> "Eddie").limit(5).forEach(System.out::println);
 		Stream.iterate(0, n -> n <= 10, n -> n + 2).forEach(System.out::println);
+		
+		// Parallel Stream
+		List.of("a", "b", "c").parallelStream().forEach(System.out::println);
 	}
 }
