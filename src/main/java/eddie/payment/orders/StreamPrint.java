@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.util.stream.IntStream;
+import java.util.Collection;
 
 public class StreamPrint {
 	public StreamPrint() {};
@@ -25,6 +26,19 @@ public class StreamPrint {
 			new Person("Alex", 20, "UK"),
 			new Person("Sebastian", 40, "FR")
 		);
+		
+		List<List<Person>> peopleGroup = List.of(
+			List.of(
+				new Person("Neo", 45, "USA"),
+				new Person("Stan", 10, "USA")
+			),
+			List.of(
+				new Person("Alex", 15, "UK"),
+				new Person("Sebastian", 40, "FR")
+			)
+		);
+
+		peopleGroup.stream().flatMap(Collection::stream).map(Person::getName).forEach(System.out::println);
 
 		List<Person> adults = new ArrayList<>();
 		for (Person person: people) {
@@ -37,6 +51,11 @@ public class StreamPrint {
 		System.out.println("Distinct intermediate method called for People");
 		people.stream().distinct().forEach(System.out::println);
 
+		// Map data in the stream to another stream
+		Stream<Person> peopleStream = people.stream();
+		Stream<String> peopleNameStrema = peopleStream.distinct().map(Person::getName);
+		peopleNameStrema.forEach(System.out::println);
+		
 		List<Person> adultsStream = people.stream().filter(person -> person.getAge() > 18).collect(Collectors.toList());
 		System.out.println(adultsStream);
 
