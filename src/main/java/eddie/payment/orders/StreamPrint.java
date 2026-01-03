@@ -18,6 +18,9 @@ public class StreamPrint {
 		List<Person> people = List.of(
 			new Person("Neo", 46, "USA"),
 			new Person("Stan", 10, "USA"),
+			new Person("Stan", 10, "USA"),
+			new Person("Alex", 20, "UK"),
+			new Person("Grace", 16, "UK"),
 			new Person("Grace", 16, "UK"),
 			new Person("Alex", 20, "UK"),
 			new Person("Sebastian", 40, "FR")
@@ -30,6 +33,9 @@ public class StreamPrint {
 		System.out.println(adults);
 		//distinct will maintaince a hashmap
 		Stream.of("apple", "orange", "apple", "orange", "cherry").distinct().forEach(System.out::println);
+
+		System.out.println("Distinct intermediate method called for People");
+		people.stream().distinct().forEach(System.out::println);
 
 		List<Person> adultsStream = people.stream().filter(person -> person.getAge() > 18).collect(Collectors.toList());
 		System.out.println(adultsStream);
