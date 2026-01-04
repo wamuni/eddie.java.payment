@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.io.IOException;
 import java.util.stream.IntStream;
 import java.util.Collection;
+import java.util.Comparator;
 
 public class StreamPrint {
 	public StreamPrint() {};
@@ -97,5 +98,7 @@ public class StreamPrint {
 		
 		// Parallel Stream
 		List.of("a", "b", "c").parallelStream().forEach(System.out::println);
+		Stream.of("blueberry", "cherry", "apple", "pear").sorted().forEach(System.out::println);
+		Stream.of("blueberry", "cherry", "apple", "pear").sorted(Comparator.comparingInt(String::length)).forEach(System.out::println);
 	}
 }
