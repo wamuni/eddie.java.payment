@@ -35,10 +35,24 @@ public class StreamPrint {
 			),
 			List.of(
 				new Person("Alex", 15, "UK"),
-				new Person("Sebastian", 40, "FR")
+				new Person("Sebastian", 40, "FR"),
+				new Person("Neo", 45, "USA")
 			)
 		);
 
+		System.out.println("All functions together");
+
+		peopleGroup.stream()
+			.flatMap(Collection::stream)
+			.filter(person -> person.getAge() > 18)
+			.distinct()
+			.sorted(Comparator.comparingInt(Person::getAge).reversed())
+			.map(Person::getName)
+			.limit(3)
+			.skip(1)
+			.forEach(System.out::println);
+
+		System.out.println("===========================");
 		peopleGroup.stream().flatMap(Collection::stream).map(Person::getName).forEach(System.out::println);
 
 		List<Person> adults = new ArrayList<>();
