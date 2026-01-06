@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.stream.IntStream;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Map;
 
 public class StreamPrint {
 	public StreamPrint() {};
@@ -39,6 +40,17 @@ public class StreamPrint {
 				new Person("Neo", 45, "USA")
 			)
 		);
+		
+		Map<String, List<Person>> peopleGroupByCountry = people.stream().collect(Collectors.groupingBy(Person::getCountry));
+		peopleGroupByCountry.forEach((k, v) -> System.out.println(k + "=" + v));
+		
+		System.out.println("Reduce method to combine Name with comma");
+		String nameString = people.stream().map(Person::getName).reduce("", (a, b) -> a + b + ",");
+		System.out.println(nameString);
+
+		System.out.println("Reduce method");
+		int sum = people.stream().mapToInt(Person::getAge).reduce(0, (a, b) -> a + b);
+		System.out.println(sum);
 
 		System.out.println("All functions together");
 
