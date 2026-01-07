@@ -13,6 +13,9 @@ import java.util.stream.IntStream;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.IntSummaryStatistics;
+import java.util.stream.Collector;
+import java.util.HashMap;
 
 public class StreamPrint {
 	public StreamPrint() {};
@@ -40,6 +43,21 @@ public class StreamPrint {
 				new Person("Neo", 45, "USA")
 			)
 		);
+		
+		System.out.println("Data Summary");
+		IntSummaryStatistics intSummary = people.stream().collect(Collectors.summarizingInt(Person::getAge));
+		System.out.println("Age average: " + intSummary.getAverage());
+		System.out.println("Age maximum: " + intSummary.getMax());
+		System.out.println("Join name using collect method");
+		String joinningName = people.stream().map(Person::getName).collect(Collectors.joining(","));
+		System.out.println(joinningName);
+
+		System.out.println("Partition by Age");
+		Map<Boolean, List<Person>> peoplePartitioningByAge = people
+			.stream()
+			.collect(Collectors.partitioningBy(person -> person.getAge() > 18));
+		
+		peoplePartitioningByAge.forEach((k, v) -> System.out.println(k + "-" + v));
 		
 		Map<String, List<Person>> peopleGroupByCountry = people.stream().collect(Collectors.groupingBy(Person::getCountry));
 		peopleGroupByCountry.forEach((k, v) -> System.out.println(k + "=" + v));
@@ -126,5 +144,42 @@ public class StreamPrint {
 		List.of("a", "b", "c").parallelStream().forEach(System.out::println);
 		Stream.of("blueberry", "cherry", "apple", "pear").sorted().forEach(System.out::println);
 		Stream.of("blueberry", "cherry", "apple", "pear").sorted(Comparator.comparingInt(String::length)).forEach(System.out::println);
+		System.out.println("How exactly collect method works");
+		List<Person> pppp = people.stream()
+			.collect(Collector.of(
+				() -> new ArrayList(),
+				(l, person) -> {
+					System.out.println("This is defined accumulator" + l);
+					l.add(person);
+				},
+				(left, right) -> {
+					System.out.println("This is a combinar, provided by supplier");
+					left.addAll(right);
+					return left;
+				},
+				Collector.Characteristics.IDENTITY_FINISH	
+			));
+		System.out.println(pppp);
+		
+		Map<String, List<Person>> countryMapUsingCustomized = people.stream()
+			.collect(Collector.of(
+				() -> new HashMap<>(),
+				(m, person) -> {
+					String cty = person.getCountry();
+					if (m.containsKey(cty)) {
+						List newList = m.get(cty);
+						newList.add(person);
+						m.put(cty, newList);
+					} else {
+						m.put(cty, list.of(person));
+					}
+				},
+				(left, right) -> {
+					left.putAll(right);
+					return left;
+				},
+				Collector.Characteristics.IDENTITY_FINISH
+			));
+		countryMapUsingCustomized.forEach((k, v) -> System.out.println(k + "-" + v));
 	}
 }
