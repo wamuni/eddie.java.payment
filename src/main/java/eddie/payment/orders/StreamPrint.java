@@ -161,25 +161,25 @@ public class StreamPrint {
 			));
 		System.out.println(pppp);
 		
-		Map<String, List<Person>> countryMapUsingCustomized = people.stream()
-			.collect(Collector.of(
-				() -> new HashMap<>(),
-				(m, person) -> {
-					String cty = person.getCountry();
-					if (m.containsKey(cty)) {
-						List newList = m.get(cty);
-						newList.add(person);
-						m.put(cty, newList);
-					} else {
-						m.put(cty, list.of(person));
-					}
-				},
-				(left, right) -> {
-					left.putAll(right);
-					return left;
-				},
-				Collector.Characteristics.IDENTITY_FINISH
-			));
-		countryMapUsingCustomized.forEach((k, v) -> System.out.println(k + "-" + v));
+//		Map<String, List<Person>> countryMapUsingCustomized = people.stream()
+//			.collect(Collector.of(
+//				() -> new HashMap<>(),
+//				(m, person) -> {
+//					String cty = person.getCountry();
+//					if (m.containsKey(cty)) {
+//						List newList = m.get(cty);
+//						newList.add(person);
+//						m.put(cty, newList);
+//					} else {
+//						m.put(cty, list.of(person));
+//					}
+//				},
+//				(left, right) -> {
+//					left.putAll(right);
+//					return left;
+//				},
+//				Collector.Characteristics.IDENTITY_FINISH
+//			));
+//		countryMapUsingCustomized.forEach((k, v) -> System.out.println(k + "-" + v));
 	}
 }

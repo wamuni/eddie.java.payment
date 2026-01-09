@@ -96,6 +96,9 @@ public class Main {
 		
 		StreamPrint sp = new StreamPrint();
 		sp.StartToPrint();
+
+		ArrayListPractice alp = new ArrayListPractice();
+		alp.ArrayListPracticeInstance();
 	}
 
 	public static void process(Runnable r) {
