@@ -1,2 +1,15 @@
 server:
   port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/orders
+    username: orders
+    password: orders
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+
+logging:
+  level:
+    org.flywaydb: info
