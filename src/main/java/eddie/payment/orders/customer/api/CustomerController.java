@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/customers")
@@ -31,5 +35,29 @@ public class CustomerController {
 	public CustomerResponse getById(@PathVariable long id) {
 		var customer = repo.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
 		return CustomerResponse.from(customer);
+	}
+
+	@PutMapping("/{id}")
+	public CustomerResponse update(
+		@PathVariable long id,
+		@Valid @RequestBody UpdateCustomerRequest req
+	) {
+		var updated = repo.update(id, req.email(), req.name())
+			.orElseThrow(() -> new CustomerNotFoundException(id));
+		return CustomerResponse.from(updated);
+	}
+
+	@GetMapping
+	public List<CustomerResponse> list(
+		@RequestParam(defaultValue = "20") int limit,
+		@RequestParam(defaultValue = "0") int offset
+	) {
+		int safeLimit = Math.min(limit, 100);
+		int safeOffset = Math.max(offset, 0);
+
+		return repo.findAll(safeLimit, safeOffset)
+			.stream()
+			.map(CustomerResponse::from)
+			.toList();
 	}
 }
