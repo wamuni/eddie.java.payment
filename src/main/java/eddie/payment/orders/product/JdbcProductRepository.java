@@ -4,9 +4,9 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.jdbc.JdbcTemplate;
-import org.springframework.jdbc.RowMapper;
-import org.srpingframework.stereotype.Repository;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcProductRepository implements ProductRepository {
