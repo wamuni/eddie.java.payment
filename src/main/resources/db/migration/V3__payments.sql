@@ -22,3 +22,5 @@ create table payments (
 
 	constraint uq_payment_order_idempotency unique (order_id, idempotency_key)
 );
+
+create index idx_payments_order_id on payments(order_id);
