@@ -1,7 +1,7 @@
 create table payments (
 	id bigserial primary key,
 
-	order_id bigint not null refreneces orders(id),
+	order_id bigint not null references orders(id),
 
 	idempotency_key varchar(255) not null,
 
