@@ -16,4 +16,5 @@ public interface OrderRepository {
 
 	OrderHeader insert(long customerId, OrderStatus status, String currency, BigDecimal totalAmount);
 	Optional<OrderHeader> findHeaderById(long orderId);
+	int makePaidIfCreated(long orderId);
 }
