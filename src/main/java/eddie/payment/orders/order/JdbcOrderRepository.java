@@ -37,6 +37,16 @@ public class JdbcOrderRepository implements OrderRepository {
 		return jdbc.query(sql, headerMapper(), orderId).stream().findFirst();
 	}
 
+	@Override
+	public int makePaidIfCreated(long orderId) {
+		var sql = """
+			update orders
+			set status = ?
+			where id = ? and status = ?
+		""";
+		return jdbc.update(sql, headerMapper(), OrderStatus.PAID.name(), orderId, OrderStatus.CREATED.name());
+	}
+
 	private RowMapper<OrderHeader> headerMapper() {
 		return (ResultSet rs, int rowNum) -> new OrderHeader(
 			rs.getLong("id"),
