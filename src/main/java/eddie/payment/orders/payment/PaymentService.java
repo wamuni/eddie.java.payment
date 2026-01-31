@@ -5,9 +5,14 @@ import eddie.payment.orders.order.OrderStatus;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.List;
+import java.nio.charset.StandardCharsets;
+
 @Service
 public class PaymentService {
 
@@ -16,7 +21,7 @@ public class PaymentService {
 
 	public PaymentService(OrderRepository orders, PaymentRepository payments) {
 		this.orders = orders;
-		this.payment = payments;
+		this.payments = payments;
 	}
 
 	@Transactional
@@ -30,7 +35,7 @@ public class PaymentService {
 		if (existing.isPresent()) return existing.get();
 
 		// 2) Load order header
-		var header = orders.findHeaderById(orderid).orElseThrow(() -> new OrderMissingException(orderId));
+		var header = orders.findHeaderById(orderId).orElseThrow(() -> new OrderMissingException(orderId));
 
 		if (header.status() == OrderStatus.PAID) {
 			throw new OrderAlreadyPaidException(orderId);
@@ -39,6 +44,7 @@ public class PaymentService {
 		String currency = header.currency();
 
 		// 3) Insert Pending payment;
+		Payment pending;
 		try {
 			pending = payments.insertPending(orderId, idempotencyKey, amount, currency, method);
 		} catch (DataIntegrityViolationException e) {
@@ -56,7 +62,32 @@ public class PaymentService {
 			} else {
 				return payments.updateResult(pending.id(), PaymentStatus.FAILED, result.failureReason());
 			}
+		} else {
+			return payments.updateResult(pending.id(), PaymentStatus.FAILED, result.failureReason());
 		}
+	}
+	
+	public Payment get(long paymentId) {
+		return payments.findById(paymentId).orElseThrow(() -> new PaymentNotFoundException(paymentId));
+	}
+
+	public List<Payment> listForOrder(long orderId, int limit, int offset) {
+		orders.findHeaderById(orderId).orElseThrow(() -> new OrderMissingException(orderId));
+		int safeLimit = Math.min(Math.max(limit, 1), 100);
+		int safeOffset = Math.max(offset, 0);
+		return payments.findByOrderId(orderId, safeLimit, safeOffset);
+	}
+	
+	public static class OrderMissingException extends RuntimeException {
+		public OrderMissingException(long id) { super("Order Not Found: " + id); }
+	}
+
+	public static class OrderAlreadyPaidException extends RuntimeException {
+		public OrderAlreadyPaidException(long id) { super("Order Already Paid: " + id); }
+	}
+
+	public static class PaymentNotFoundException extends RuntimeException {
+		public PaymentNotFoundException(long id) { super("Payment Not Found:" + id); }
 	}
 	
 	private record SimulatedResult(boolean succeeded, String failureReason) {};
