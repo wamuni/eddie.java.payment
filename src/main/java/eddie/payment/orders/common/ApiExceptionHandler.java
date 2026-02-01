@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import eddie.payment.orders.order.OrderService;
+import eddie.payment.orders.payment.PaymentService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +18,13 @@ public class ApiExceptionHandler {
 	private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
 	@ResponseStatus(HttpStatus.CONFLICT)
-	@ExceptionHandler(DataIntegrityViolationException.class)
+	@ExceptionHandler({
+		DataIntegrityViolationException.class,
+		PaymentService.OrderAlreadyPaidException.class
+	})
 	public ErrorResponse handleDuplicateKey(DataIntegrityViolationException ex) {
-		log.warn("Conflict: {}", safeMessage(ex));
-		return new ErrorResponse("duplicate_resource", "Email already exists");
+		log.warn("Conflict: (data integrity violation): {}", safeMessage(ex));
+		return new ErrorResponse("duplicate_resource", "Resouce is duplicated");
 	}
 
 	private String safeMessage(DataIntegrityViolationException ex) {
@@ -32,7 +36,9 @@ public class ApiExceptionHandler {
 	@ExceptionHandler({
 		OrderService.OrderNotFoundException.class,
 		OrderService.CustomerMissingException.class,
-		OrderService.ProductMissingException.class
+		OrderService.ProductMissingException.class,
+		PaymentService.OrderMissingException.class,
+		PaymentService.PaymentNotFoundException.class
 	})
 	public ErrorResponse handleNotFound(RuntimeException ex) {
 		log.warn("404 NOT FOUND: {}", ex);

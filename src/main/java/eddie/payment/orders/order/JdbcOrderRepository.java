@@ -44,7 +44,7 @@ public class JdbcOrderRepository implements OrderRepository {
 			set status = ?
 			where id = ? and status = ?
 		""";
-		return jdbc.update(sql, headerMapper(), OrderStatus.PAID.name(), orderId, OrderStatus.CREATED.name());
+		return jdbc.update(sql, OrderStatus.PAID.name(), orderId, OrderStatus.CREATED.name());
 	}
 
 	private RowMapper<OrderHeader> headerMapper() {
