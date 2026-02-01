@@ -52,5 +52,4 @@ public class ApiExceptionHandler {
 		return new ErrorResponse("bad_request", ex.getMessage());
 	}
 
-	record ErrorResponse(String code, String message) {};
 }
