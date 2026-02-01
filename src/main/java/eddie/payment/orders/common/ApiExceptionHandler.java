@@ -24,7 +24,7 @@ public class ApiExceptionHandler {
 	})
 	public ErrorResponse handleDuplicateKey(DataIntegrityViolationException ex) {
 		log.warn("Conflict: (data integrity violation): {}", safeMessage(ex));
-		return new ErrorResponse("duplicate_resource", "Resouce is duplicated");
+		return new ErrorResponse("duplicate_resource", "Resource is duplicated");
 	}
 
 	private String safeMessage(DataIntegrityViolationException ex) {
