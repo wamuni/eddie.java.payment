@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Order", description = "Create an order, retrieve order by id")
 @RestController
 @RequestMapping("v1/orders")
 public class OrderController {
