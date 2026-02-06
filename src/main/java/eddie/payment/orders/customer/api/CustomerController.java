@@ -18,6 +18,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Customer", description = "Register customer info")
 @RestController
 @RequestMapping("/v1/customers")
 public class CustomerController {

@@ -15,6 +15,9 @@ import eddie.payment.orders.product.ProductRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Product", description = "Create prodcut, retrieve product list")
 @RestController
 @RequestMapping("v1/products")
 public class ProductController {

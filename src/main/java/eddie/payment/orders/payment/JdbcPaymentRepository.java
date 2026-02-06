@@ -32,7 +32,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
 	@Override
 	public Payment insertPending(long orderId, String idempotencyKey, BigDecimal amount, String currency, String method) {
 		var sql = """
-			insert into payments (order_id, idempotencyKey, status, amount, currency, method)
+			insert into payments (order_id, idempotency_key, status, amount, currency, method)
 			values (?, ?, ?, ?, ?, ?)
 			returning id, order_id, idempotency_key, status, amount, currency, method, failure_reason, created_at, updated_at
 		""";

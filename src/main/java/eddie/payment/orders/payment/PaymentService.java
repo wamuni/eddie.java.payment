@@ -82,7 +82,7 @@ public class PaymentService {
 		public OrderMissingException(long id) { super("Order Not Found: " + id); }
 	}
 
-	public static class OrderAlreadyPaidException extends RuntimeException {
+	public static class OrderAlreadyPaidException extends DataIntegrityViolationException{
 		public OrderAlreadyPaidException(long id) { super("Order Already Paid: " + id); }
 	}
 
