@@ -47,6 +47,11 @@
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
       <version>2.5.0</version>
     </dependency>
+    <dependency>
+	<groupId>eddie.payment</groupId>
+	<artifactId>auth_sdk</artifactId>
+	<version>0.1.0</version>
+    </dependency>
   </dependencies>
 
   <url>http://maven.apache.org</url>
