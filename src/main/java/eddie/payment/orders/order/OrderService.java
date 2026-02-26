@@ -86,8 +86,8 @@ public class OrderService {
 		);
 	}
 
-	public record CreateItem(long productId, int quantity) {};
-	public record ComputedItem(long productId, int quantity, BigDecimal unitPriceAmount, BigDecimal lineAmount) {};
+	public record CreateItem(long productId, int quantity) {}
+	public record ComputedItem(long productId, int quantity, BigDecimal unitPriceAmount, BigDecimal lineAmount) {}
 	
 	public static class OrderNotFoundException extends RuntimeException {
 		public OrderNotFoundException(long id) { super("Order not found: " + id); }
