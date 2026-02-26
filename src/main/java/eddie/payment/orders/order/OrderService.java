@@ -1,5 +1,6 @@
 package eddie.payment.orders.order;
 
+import eddie.payment.orders.aop.Timed;
 import eddie.payment.orders.customer.CustomerRepository;
 import eddie.payment.orders.product.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class OrderService {
 	}
 
 	@Transactional
+	@Timed
 	public Order createOrder(long customerId, String currency, List<CreateItem> items) {
 
 		customers.findById(customerId).orElseThrow(() -> new CustomerMissingException(customerId));
